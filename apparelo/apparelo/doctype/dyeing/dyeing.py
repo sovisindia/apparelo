@@ -25,15 +25,19 @@ class Dyeing(Document):
 		for input_item_name in input_item_names:
 			input_items.append(frappe.get_doc('Item', input_item_name))
 		for item in input_items:
+			yarn_shade_found = False
 			attribute_set = get_item_attribute_set(list(map(lambda x: x.attributes,[item])))
 			for mapping in self.colour_shade_mapping:
 				if mapping.yarn_shade in attribute_set['Yarn Shade']:
+					yarn_shade_found = True
 					attribute_set['Apparelo Colour'] = [mapping.colour]
 					variant = create_variants('Dyed cloth', attribute_set)
 					variants.extend(variant)
 					variant_doc=frappe.get_doc("Item",variant[0])
 					variant_attr = get_attr_dict(variant_doc.attributes)
 					new_variants.append(customize_pf_item_code('Dyed Cloth', attribute_set, variant_attr, variant[0]))
+			if not yarn_shade_found:
+				frappe.throw(_(f"No yarn shade mapping found for {item.item_name}"))
 		if len(new_variants)==0:
 			new_variants=variants
 		return new_variants
