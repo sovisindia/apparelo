@@ -437,7 +437,7 @@ def get_expected_items_in_return(doc, items_to_be_sent=None, use_delivery_qty=Fa
 		else:
 			receivable_list[item] = receivable_list[item] + (receivable_list[item] * percentage_in_excess)
 
-		item_to_be_received['raw_materials'] = frappe.get_list('BOM Item', filters={'parent': item_to_be_received['bom']}, fields=['item_code', 'uom', 'qty', f'{receivable_list[item]} as req', 'conversion_factor'])
+		item_to_be_received['raw_materials'] = frappe.get_list('BOM Item', filters={'parent': item_to_be_received['bom']}, fields=['item_code', 'uom', 'qty', f'"{receivable_list[item]}" as req', 'conversion_factor'])
 
 	# Stock validation starts
 	if not items_to_be_sent:
@@ -475,9 +475,9 @@ def get_expected_items_in_return(doc, items_to_be_sent=None, use_delivery_qty=Fa
 		for stock_item_consumable_index in in_stock_item_consumable_indexes:
 			for i, rm in enumerate(items_to_be_received[stock_item_consumable_index]['raw_materials']):
 				if use_delivery_qty:
-					supply_qty = (rm['req'] * in_stock_item['quantity'])/total
+					supply_qty = (flt(rm['req']) * in_stock_item['quantity'])/total
 				else:
-					supply_qty = (rm['req'] * in_stock_item['available_quantity'])/total
+					supply_qty = (flt(rm['req']) * in_stock_item['available_quantity'])/total
 
 				if frappe.db.get_value('UOM', rm['uom'], 'must_be_whole_number'):
 					supply_qty = int(math.floor(supply_qty))
