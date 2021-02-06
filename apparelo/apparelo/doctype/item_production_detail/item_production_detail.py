@@ -753,6 +753,72 @@ def create_process_records(doc):
 						'previous_process': process['previous_process'] if 'previous_process' in process else ''})
 	return [processes, final_colours]
 
+@frappe.whitelist()
+def swap_all_indexes(doc):
+	if isinstance(doc, string_types):
+		doc = frappe._dict(json.loads(doc))
+
+	final_processes = []
+	linked_index = []
+	action = doc.get('action')
+	index = doc.get('index')
+	processes = doc.get('processes')
+
+
+	if index and action == 'Delete':
+		for process in processes:
+			if 'input_index' in process and process['input_index']:
+				for idx in process['input_index'].split(','):
+					if int(idx) == index:
+						linked_index.append(str(process['idx']))
+		if linked_index:
+			linked_index = ','.join(linked_index)
+			frappe.throw(_(f"Kindly remove the input index {index} linked at row(s) {linked_index}."))
+
+		processes.pop(index-1)
+		for idx in range(0, len(processes)):
+			process = processes[idx]
+			final_processes.append({
+				'input_item': process['input_item'] if 'input_item' in process else '',
+				'input_index':','.join([str(int(in_idx)-1) if in_idx and int(in_idx) > index else in_idx for in_idx in process['input_index'].split(',')]) if 'input_index' in process else '',
+				'process_name': process['process_name'],
+				'process_record': process['process_record'],
+				'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
+				'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
+				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
+
+	if index and action == 'Add':
+		for idx in range(0, index-1):
+			process = processes[idx]
+			final_processes.append({
+				'input_item': process['input_item'] if 'input_item' in process else '',
+				'input_index':process['input_index'] if 'input_index' in process else '',
+				'process_name': process['process_name'],
+				'process_record': process['process_record'],
+				'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
+				'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
+				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
+		final_processes.append({
+				'input_item': '',
+				'input_index': '',
+				'process_name': '',
+				'process_record': '',
+				'ipd_name': '',
+				'ipd_process_index': '',
+				'previous_process': ''})
+
+		for idx in range(index-1, len(processes)):
+			process = processes[idx]
+			final_processes.append({
+				'input_item': process['input_item'] if 'input_item' in process else '',
+				'input_index':','.join([str(int(in_idx)+1) if in_idx and int(in_idx) >= index else in_idx for in_idx in process['input_index'].split(',')]) if 'input_index' in process else '',
+				'process_name': process['process_name'],
+				'process_record': process['process_record'],
+				'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
+				'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
+				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
+
+	return final_processes
 
 def get_new_doc(ipd_name, process):
 	temp = 0
