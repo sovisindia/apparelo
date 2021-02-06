@@ -6,12 +6,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "colours_1",
+  "colours",
   "helper_section_section",
   "yarn_shade",
   "get_colour_shade_combination",
   "column_break_5",
-  "colours",
+  "ipd_colours",
   "section_break_6",
   "colour_shade_mapping",
   "section_break_8",
@@ -27,9 +27,10 @@
  "fields": [
   {
    "fieldname": "colours",
-   "fieldtype": "Table MultiSelect",
-   "label": "Colours",
-   "options": "Item Production Detail Colour"
+   "fieldtype": "Table",
+   "label": "Colours (*Deprecated)",
+   "options": "Item Production Detail Colour",
+   "read_only": 1
   },
   {
    "allow_in_quick_entry": 1,
@@ -113,13 +114,6 @@
    "options": "Apparelo Yarn Shade"
   },
   {
-   "fieldname": "colours_1",
-   "fieldtype": "Table",
-   "label": "Colours (*Deprecated)",
-   "options": "Item Production Detail Colour",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_14",
    "fieldtype": "Column Break"
   },
@@ -134,12 +128,18 @@
    "fieldname": "helper_section_section",
    "fieldtype": "Section Break",
    "label": "Helper Section"
+  },
+  {
+   "fieldname": "ipd_colours",
+   "fieldtype": "Table MultiSelect",
+   "label": "Colours",
+   "options": "Item Production Detail Colour"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2021-02-05 18:00:13.372769",
+ "modified": "2021-02-06 12:24:54.082804",
  "modified_by": "Administrator",
  "module": "Apparelo",
  "name": "Dyeing",

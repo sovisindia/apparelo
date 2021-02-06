@@ -146,12 +146,13 @@ def get_colour_shade_comibination(doc):
 	if isinstance(doc, string_types):
 		doc = frappe._dict(json.loads(doc))
 	
+	colours = doc.get('colours') or doc.get('ipd_colours')
 	if doc.get('colour_shade_mapping') != None:
 		for row in doc.get('colour_shade_mapping'):
 			if 'yarn_shade' in row:
 				colour_shade_mapping.append({'yarn_shade': row['yarn_shade'],'colour': row['colour']})
 	
-	for colour in doc.get('colours'):
+	for colour in colours:
 		colour_shade_mapping.append({'yarn_shade': doc.get('yarn_shade'),'colour': colour['colour']})
 	
 	return map(dict, set(tuple(value.items()) for value in colour_shade_mapping))
