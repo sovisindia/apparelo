@@ -429,7 +429,7 @@ class ItemProductionDetail(Document):
 						ipd.append(process_variants)
 					continue
 			except:
-				frappe.throw(_("Exception occurred while processing index {0}: previous process log - {1}").format(frappe.bold(process['idx']), process_variants))
+				frappe.throw(_("Exception occurred while processing index {0}: previous process log - {1} \n\n\n\n IPD dump up to the error: \n {2}").format(frappe.bold(process.__dict__['idx']), process_variants, ipd))
 
 		if self.additional_flows!=[]:
 			ipd=additional_process(self,ipd)
