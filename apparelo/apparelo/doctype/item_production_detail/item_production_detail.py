@@ -788,36 +788,28 @@ def swap_all_indexes(doc):
 				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
 
 	if index and action == 'Add':
-		for idx in range(0, index-1):
+		for idx in range(0, len(processes)):
 			process = processes[idx]
-			final_processes.append({
-				'input_item': process['input_item'] if 'input_item' in process else '',
-				'input_index':process['input_index'] if 'input_index' in process else '',
-				'process_name': process['process_name'],
-				'process_record': process['process_record'],
-				'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
-				'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
-				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
-		final_processes.append({
-				'input_item': '',
-				'input_index': '',
-				'process_name': '',
-				'process_record': '',
-				'ipd_name': '',
-				'ipd_process_index': '',
-				'previous_process': ''})
-
-		for idx in range(index-1, len(processes)):
-			process = processes[idx]
-			final_processes.append({
-				'input_item': process['input_item'] if 'input_item' in process else '',
-				'input_index':','.join([str(int(in_idx)+1) if in_idx and int(in_idx) >= index else in_idx for in_idx in process['input_index'].split(',')]) if 'input_index' in process else '',
-				'process_name': process['process_name'],
-				'process_record': process['process_record'],
-				'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
-				'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
-				'previous_process': process['previous_process'] if 'previous_process' in process else ''})
-
+			if idx < index-1:
+				final_processes.append(process)
+			if idx == index-1:
+				final_processes.append({
+					'input_item': '',
+					'input_index': '',
+					'process_name': '',
+					'process_record': '',
+					'ipd_name': '',
+					'ipd_process_index': '',
+					'previous_process': ''})
+			if idx >= index-1:
+				final_processes.append({
+					'input_item': process['input_item'] if 'input_item' in process else '',
+					'input_index':','.join([str(int(in_idx)+1) if in_idx and int(in_idx) >= index else in_idx for in_idx in process['input_index'].split(',')]) if 'input_index' in process else '',
+					'process_name': process['process_name'],
+					'process_record': process['process_record'],
+					'ipd_name': process['ipd_name'] if 'ipd_name' in process else '',
+					'ipd_process_index': process['ipd_process_index'] if 'ipd_process_index' in process else '',
+					'previous_process': process['previous_process'] if 'previous_process' in process else ''})
 	return final_processes
 
 def get_new_doc(ipd_name, process):
