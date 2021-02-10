@@ -175,7 +175,7 @@ def get_part_size_combination(doc):
 	for size in doc.get('sizes'):
 		for part in doc.get('parts'):
 			part_size_combination.append({'part':part['parts'],'size':size['size']})
-	return part_size_combination
+	return map(dict, set(tuple(value.items()) for value in part_size_combination))
 
 
 @frappe.whitelist()
@@ -200,7 +200,7 @@ def get_part_colour_combination(doc):
 			for part in doc.get('colour_parts'):
 				for style in doc.get('styles'):
 					part_colour_combination.append({'part':part['parts'],'colour':colour['colors'],'style':style['styles']})
-	return(part_colour_combination)
+	return map(dict, set(tuple(value.items()) for value in part_colour_combination))
 
 def create_common_bom(self, variant,attr, input_items, process_record, idx):
 	dia_weight,count=self.get_matching_details(attr["Part"], attr["Apparelo Size"])
