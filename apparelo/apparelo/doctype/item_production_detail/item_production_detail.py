@@ -21,6 +21,10 @@ class ItemProductionDetail(Document):
 		if self.ipd_submission_done:
 			self.ipd_submission_done = 0
 	def on_submit(self):
+		is_template = frappe.db.get_value('Item',self.item, 'has_variants')
+		if not is_template:
+			frappe.throw(_("Kindly make the final product item {0} as a template.").format(comma_and(
+			"""<a href="#Form/Item/{0}">{1}</a>""".format(self.item, self.item))))
 		if self.ipd_submission_done:
 			return
 		self.validate_process_records()
@@ -235,9 +239,9 @@ class ItemProductionDetail(Document):
 									input_items_.extend(input_items)
 									process_variants['process_record'] = process.process_record
 									steaming_doc = frappe.get_doc('Steaming', process.process_record)
-									variant,attribute_set = steaming_doc.create_variants(input_items)
+									variant,apparelo_colours = steaming_doc.create_variants(input_items)
 									variants.extend(variant)
-									boms.extend(steaming_doc.create_boms(input_items, variants, attribute_set,item_size,colour,piece_count))
+									boms.extend(steaming_doc.create_boms(input_items, variants, apparelo_colours,item_size,colour,piece_count))
 						process_variants['variants'] = list(set(variants))
 						process_variants['BOM']=list(set(boms))
 						process_variants['input_item']=list(set(input_items_))
@@ -264,9 +268,9 @@ class ItemProductionDetail(Document):
 									input_items_.extend(input_items)
 									process_variants['process_record'] = process.process_record
 									compacting_doc = frappe.get_doc('Compacting', process.process_record)
-									variant,attribute_set = compacting_doc.create_variants(input_items)
+									variant,apparelo_colours = compacting_doc.create_variants(input_items)
 									variants.extend(variant)
-									boms.extend(compacting_doc.create_boms(input_items, variants, attribute_set,item_size,colour,piece_count))
+									boms.extend(compacting_doc.create_boms(input_items, variants, apparelo_colours,item_size,colour,piece_count))
 						process_variants['variants'] = list(set(variants))
 						process_variants['BOM']=list(set(boms))
 						process_variants['input_item']=list(set(input_items_))
