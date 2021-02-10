@@ -2,6 +2,21 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('DC', {
+	refresh: function(frm) {
+		if (frm.doc.docstatus === 1 && frm.doc.return_materials) {
+			frm.add_custom_button(__("GRN"), ()=> {
+				frm.trigger("make_grn");
+			}, __('Create'));
+		}
+		frm.page.set_inner_btn_group_as_primary(__('Create'));
+	},
+	make_grn: function() {
+		frappe.model.open_mapped_doc({
+			method: "apparelo.apparelo.doctype.dc.dc.make_grn",
+			frm: cur_frm,
+			freeze_message: __("Creating GRN ...")
+		})
+	},
 	onload: function(frm) {
 		frm.set_value("company",frappe.defaults.get_default("company"));
 		frappe.db.get_list("Address",{filters:{is_shipping_address: 1}}).then(data => {

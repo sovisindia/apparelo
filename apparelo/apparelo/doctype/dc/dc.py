@@ -7,6 +7,7 @@ import frappe
 import json
 import math
 from frappe import _, msgprint
+from frappe.model.mapper import get_mapped_doc
 from six import string_types, iteritems
 from frappe.model.document import Document
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
@@ -749,3 +750,20 @@ def make_entry(doc):
 					item_dict["additional_parameters"] = item['additional_parameters']
 				return_items_after_entry.append(item_dict)
 	return return_items_after_entry
+
+@frappe.whitelist()
+def make_grn(source_name, target_doc=None):
+	doc = get_mapped_doc("DC", source_name,	{
+		"DC": {
+			"doctype": "GRN",
+			"field_map": {
+				"supplier": "supplier",
+				"lot": "lot",
+				"expect_return_items_at": "location",
+				"name": "against_document",
+				"doctype": "against_type",
+				"return_materials": "return_materials"
+			}
+			}
+		}, target_doc)
+	return doc
