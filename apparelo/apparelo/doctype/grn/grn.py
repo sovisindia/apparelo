@@ -71,6 +71,7 @@ class GRN(Document):
 			process = frappe.db.get_value('DC',{'name': self.against_document},'process_1')
 			return get_grouping_params(process)
 
+@frappe.whitelist()
 def get_type(doctype, txt, searchfield, start, page_len, filters):
 	if filters['type']=='DC':
 		DC = [[dc['name']] for dc in frappe.get_list("DC", filters={'supplier': ['in',filters['supplier']],'lot':['in',filters['lot']]}, fields=["name"])]
@@ -78,12 +79,16 @@ def get_type(doctype, txt, searchfield, start, page_len, filters):
 	else:
 		PO = [[po['name']] for po in frappe.get_list("Purchase Order", filters={'supplier': ['in',filters['supplier']],'lot':['in',filters['lot']]}, fields=["name"])]
 		return PO
+
+@frappe.whitelist()
 def get_Lot(doctype, txt, searchfield, start, page_len, filters):
 	lot_list = []
 	for lot in frappe.get_list("Purchase Order", fields=["lot"]):
 		if not lot['lot'] in lot_list:
 			lot_list.append([lot['lot']])
 	return lot_list
+
+@frappe.whitelist()
 def get_supplier(doctype, txt, searchfield, start, page_len, filters):
 	supplier_list = []
 	for supplier in frappe.get_list("Purchase Order", fields=["supplier"]):
