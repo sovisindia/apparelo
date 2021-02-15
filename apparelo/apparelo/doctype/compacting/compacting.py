@@ -45,7 +45,9 @@ class Compacting(Document):
 				variant_attr = get_attr_dict(variant_doc.attributes)
 				for color in apparelo_colours:
 					for dia in self.dia_conversions:
-						if color in input_attr["Apparelo Colour"] and color in variant_attr["Apparelo Colour"] and dia.from_dia in input_attr["Dia"] and dia.from_dia in variant_attr["Dia"]:
+						if color in input_attr["Apparelo Colour"] and color in variant_attr["Apparelo Colour"] \
+							and dia.from_dia in input_attr["Dia"] and dia.from_dia in variant_attr["Dia"] \
+							and input_attr['Knitting Type'] == variant_attr['Knitting Type']:
 							bom_for_variant = frappe.get_doc({
 								"doctype": "BOM",
 								"currency": get_default_currency(),
