@@ -155,4 +155,4 @@ def get_colour_shade_comibination(doc):
 	for colour in colours:
 		colour_shade_mapping.append({'yarn_shade': doc.get('yarn_shade'),'colour': colour['colour']})
 	
-	return map(dict, set(tuple(value.items()) for value in colour_shade_mapping))
+	return map(dict, sorted(set(tuple(value.items()) for value in colour_shade_mapping)))
