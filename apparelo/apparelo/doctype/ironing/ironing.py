@@ -46,10 +46,10 @@ class Ironing(Document):
 							item_list.append({"item_code": input_item,"uom": "Nos"})
 					else:
 						if self.enable_set_item:
-							for item_mapping in self.set_item_mapping:
-								if item_mapping.part in input_attr['Part'] and item_mapping.part_colour in input_attr["Apparelo Colour"] and item_mapping.piece_colour in variant_attr["Apparelo Colour"]:
-									if size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"]:
-										item_list.append({"item_code": input_item,"uom": "Nos"})
+							is_mapped = frappe.db.get_value('Set Item Mapping', {'parent': self.name,'part': input_attr['Part'][0], \
+								'part_colour': input_attr["Apparelo Colour"][0], 'piece_colour': variant_attr["Apparelo Colour"][0]})
+							if is_mapped and size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"]:
+								item_list.append({"item_code": input_item,"uom": "Nos"})
 						else:
 							for colour in colours:
 								if size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"] and colour in input_attr["Apparelo Colour"] and colour in variant_attr["Apparelo Colour"]:
