@@ -46,7 +46,8 @@ class Ironing(Document):
 							item_list.append({"item_code": input_item,"uom": "Nos"})
 					else:
 						if self.enable_set_item:
-							is_mapped = frappe.db.get_value('Set Item Mapping', {'parent': self.name,'part': input_attr['Part'][0], 'part_colour': input_attr["Apparelo Colour"][0], 'piece_colour': variant_attr["Apparelo Colour"][0]})
+							is_mapped = frappe.db.get_value('Set Item Mapping', {'parent': self.name,'part': input_attr['Part'][0], \
+								'part_colour': input_attr["Apparelo Colour"][0], 'piece_colour': variant_attr["Apparelo Colour"][0]})
 							if is_mapped and size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"]:
 								item_list.append({"item_code": input_item,"uom": "Nos"})
 						else:
