@@ -214,7 +214,7 @@ def duplicate_values(doc):
 def delete_unavailable_return_items(doc):
 	available_return_items = []
 	if isinstance(doc, string_types):
-    		doc = frappe._dict(json.loads(doc))
+		doc = frappe._dict(json.loads(doc))
 	for item in doc.get('return_materials'):
 		item_dict={}
 		if 'received_qty' in item:

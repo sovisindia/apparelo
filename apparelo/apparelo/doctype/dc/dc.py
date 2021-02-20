@@ -27,6 +27,10 @@ class DC(Document):
 		self.items = list(filter(lambda x: x.quantity != 0, self.items))
 		self.return_materials = list(filter(lambda x: x.qty != 0, self.return_materials))
 
+		if not self.items:
+			frappe.throw(_(f'Please enter delivery quantity for delivery items'))
+		if not self.return_materials:
+			frappe.throw(_(f'Please enter expected quantity for return materials'))
 		# printable table creation
 		items = [item for item in self.items if vars(item)['deliver_later']==0]
 		printable_list_d = generate_printable_list(items, get_grouping_params(self.process_1), field='quantity')
@@ -124,8 +128,9 @@ class DC(Document):
 		return po
 
 	def validate_delivery(self):
+		is_negative_stock_allowed = frappe.db.get_single_value("Stock Settings","allow_negative_stock")
 		for item in self.items:
-			if item.quantity > item.available_quantity:
+			if item.quantity > item.available_quantity and not is_negative_stock_allowed:
 				frappe.throw(_(f'Cannot deliver more than we have for {item.item_code}'))
 
 			if item.deliver_later and not item.delivery_location:
@@ -705,11 +710,13 @@ def delete_unavailable_delivery_items(doc):
 def delete_unavailable_return_items(doc):
 	available_return_items = []
 	if isinstance(doc, string_types):
-    		doc = frappe._dict(json.loads(doc))
+		doc = frappe._dict(json.loads(doc))
 	for item in doc.get('return_materials'):
 		item_dict={}
 		if item['qty']!=0:
-			item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],"bom":item['bom'],"qty":item['qty'],"projected_qty":item['projected_qty'],"uom":item['uom'],"secondary_qty":item['secondary_qty'],"secondary_uom":item['secondary_uom']}
+			item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],"bom":item['bom'],"qty":item['qty'],"projected_qty":item['projected_qty'],"uom":item['uom'],"secondary_qty":item['secondary_qty']}
+			if 'secondary_uom' in item:
+				item_dict["secondary_uom"] = item['secondary_uom']
 			if 'additional_parameters' in item:
 				item_dict["additional_parameters"] = item['additional_parameters']
 		if item_dict:
