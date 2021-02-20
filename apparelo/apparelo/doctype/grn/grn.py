@@ -17,14 +17,14 @@ from apparelo.apparelo.doctype.dc.dc import get_grouping_params
 class GRN(Document):
 	def validate(self):
 		self.set_po()
-		printable_list_received = generate_printable_list(self.return_materials, self.get_grouping_params(),field='received_qty')
+		printable_list_received = generate_printable_list(self.return_materials, self.get_grouping_params(), self.lot, field='received_qty')
 		printable_list_received[0]['section_title'] = 'Received Return Items'
 		generate_total_row_and_column(printable_list_received)
 
 		# Check for rejected quantity
 		rejected_qty_items = [item for item in self.return_materials if vars(item)['rejected_qty']!=0]
 		if rejected_qty_items:
-			printable_list_rejected = generate_printable_list(rejected_qty_items, self.get_grouping_params(),field='rejected_qty')
+			printable_list_rejected = generate_printable_list(rejected_qty_items, self.get_grouping_params(), self.lot, field='rejected_qty')
 			printable_list_rejected[0]['section_title'] = 'Rejected Return Items'
 			generate_total_row_and_column(printable_list_rejected)
 			printable_list_received+=printable_list_rejected

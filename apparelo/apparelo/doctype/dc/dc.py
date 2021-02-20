@@ -33,7 +33,7 @@ class DC(Document):
 			frappe.throw(_(f'Please enter expected quantity for return materials'))
 		# printable table creation
 		items = [item for item in self.items if vars(item)['deliver_later']==0]
-		printable_list_d = generate_printable_list(items, get_grouping_params(self.process_1), field='quantity')
+		printable_list_d = generate_printable_list(items, get_grouping_params(self.process_1), self.lot, field='quantity')
 		generate_total_row_and_column(printable_list_d)
 		printable_list_d[0]['section_title'] = 'Delivery Items'
 		deliver_later_items = [item for item in self.items if vars(item)['deliver_later']!=0]
@@ -46,12 +46,12 @@ class DC(Document):
 				else:
 					location_wise_items[vars(items)['delivery_location']].append(items)
 			for location in location_wise_items.keys():
-				printable_list = generate_printable_list(location_wise_items[location], get_grouping_params(self.process_1), field='quantity')
+				printable_list = generate_printable_list(location_wise_items[location], get_grouping_params(self.process_1), self.lot, field='quantity')
 				generate_total_row_and_column(printable_list)
 				generate_empty_column_list(printable_list)
 				printable_list[0]['section_title'] = location
 				printable_list_l+=printable_list
-		printable_list_r = generate_printable_list(self.return_materials, get_grouping_params(self.process_1), field='qty')
+		printable_list_r = generate_printable_list(self.return_materials, get_grouping_params(self.process_1), self.lot, field='qty')
 		generate_total_row_and_column(printable_list_r)
 		printable_list_r[0]['section_title'] = 'Expected Return Items'
 		self.dc_cloth_quantity = generate_html_from_list(printable_list_d+printable_list_l+printable_list_r)
