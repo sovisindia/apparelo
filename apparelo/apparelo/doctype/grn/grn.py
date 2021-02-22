@@ -72,6 +72,25 @@ class GRN(Document):
 			return get_grouping_params(process)
 
 @frappe.whitelist()
+def get_supplier_based_address(supplier):
+	address = frappe.db.sql(
+		'SELECT dl.parent '
+		'from `tabDynamic Link` dl join `tabAddress` ta on dl.parent=ta.name '
+		'where '
+		'dl.link_doctype=%s '
+		'and dl.link_name=%s '
+		'and dl.parenttype="Address" '
+		'and ifnull(ta.disabled, 0) = 0 and'
+		'(ta.address_type="Billing" or ta.is_primary_address=1) '
+		'order by ta.is_primary_address desc, ta.address_type desc limit 1',
+		("Supplier", supplier)
+	)
+	if address:
+		return address[0][0]
+	else:
+		return ''
+
+@frappe.whitelist()
 def get_type(doctype, txt, searchfield, start, page_len, filters):
 	if filters['type']=='DC':
 		DC = [[dc['name']] for dc in frappe.get_list("DC", filters={'supplier': ['in',filters['supplier']],'lot':['in',filters['lot']]}, fields=["name"])]
