@@ -27,6 +27,10 @@ class DC(Document):
 		self.items = list(filter(lambda x: x.quantity != 0, self.items))
 		self.return_materials = list(filter(lambda x: x.qty != 0, self.return_materials))
 
+		if not self.items:
+			frappe.throw(_(f'Please enter delivery quantity for delivery items'))
+		if not self.return_materials:
+			frappe.throw(_(f'Please enter expected quantity for return materials'))
 		# printable table creation
 		items = [item for item in self.items if vars(item)['deliver_later']==0]
 		printable_list_d = generate_printable_list(items, get_grouping_params(self.process_1), self.lot, field='quantity')
@@ -112,6 +116,31 @@ class DC(Document):
 			"supplier_warehouse": supplier_warehouse,
 			"items": dc_items})
 		po.save()
+		supplied_items = frappe.get_all('Purchase Order Item Supplied',
+				{'parent':po.name},'rm_item_code')
+		supplied_items_set = set()
+		for item in supplied_items:
+			supplied_items_set.add(item['rm_item_code'])
+		qty_wise_dc_item = self.get_dc_item()
+		for dc_item in qty_wise_dc_item:
+			supplied_items_set.remove(dc_item['item'])
+			item_name = dc_item['item']
+			idx = dc_item['idx']
+			qty = dc_item['qty']
+			supplied_qty_list = frappe.get_all('Purchase Order Item Supplied',
+				{'parent':po.name,'rm_item_code':dc_item['item']},'supplied_qty')
+			if not supplied_qty_list:
+				frappe.throw(_(f'Item {item_name} entered in delivery items at row {idx} was not found in PO supplied items'))
+			else:
+				supplied_qty = 0 
+				for row in supplied_qty_list:
+					supplied_qty += row['supplied_qty']
+				if not supplied_qty == dc_item['qty']:
+					frappe.throw(_(f'Item {item_name} of qty {qty} in delivery items at row {idx} was not found in PO supplied items'))
+		
+		if supplied_items_set:
+			supplied_items = ','.join(supplied_items_set)
+			frappe.throw(_(f'PO supplied items {supplied_items} was not found in delivery items entered.'))	
 		# set_reserve_warehouse related code does not exist in python hence the following is required
 		supplied_items_reserve_warehouse = self.get_supplied_items_reserve_warehouse()
 		for item in po.supplied_items:
@@ -124,13 +153,24 @@ class DC(Document):
 		return po
 
 	def validate_delivery(self):
+		is_negative_stock_allowed = frappe.db.get_single_value("Stock Settings","allow_negative_stock")
 		for item in self.items:
-			if item.quantity > item.available_quantity:
+			if item.quantity > item.available_quantity and not is_negative_stock_allowed:
 				frappe.throw(_(f'Cannot deliver more than we have for {item.item_code}'))
 
 			if item.deliver_later and not item.delivery_location:
 				frappe.throw(_(f'Mention <b> Delivery Location </b> to deliver later for {item.pf_item_code}'))
 	
+	def get_dc_item(self):
+		dc_item_list = []
+		for item in self.items:
+			dc_item = {}
+			dc_item['item'] = item.item_code
+			dc_item['idx'] = item.idx
+			dc_item['qty'] = item.quantity
+			dc_item_list.append(dc_item)
+		return dc_item_list
+
 	def get_supplied_items_reserve_warehouse(self):
 		item_reserve_warehouse_location = {}
 		for item in self.items:
@@ -705,11 +745,13 @@ def delete_unavailable_delivery_items(doc):
 def delete_unavailable_return_items(doc):
 	available_return_items = []
 	if isinstance(doc, string_types):
-    		doc = frappe._dict(json.loads(doc))
+		doc = frappe._dict(json.loads(doc))
 	for item in doc.get('return_materials'):
 		item_dict={}
 		if item['qty']!=0:
-			item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],"bom":item['bom'],"qty":item['qty'],"projected_qty":item['projected_qty'],"uom":item['uom'],"secondary_qty":item['secondary_qty'],"secondary_uom":item['secondary_uom']}
+			item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],"bom":item['bom'],"qty":item['qty'],"projected_qty":item['projected_qty'],"uom":item['uom'],"secondary_qty":item['secondary_qty']}
+			if 'secondary_uom' in item:
+				item_dict["secondary_uom"] = item['secondary_uom']
 			if 'additional_parameters' in item:
 				item_dict["additional_parameters"] = item['additional_parameters']
 		if item_dict:
