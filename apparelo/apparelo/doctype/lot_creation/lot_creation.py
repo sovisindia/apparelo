@@ -212,7 +212,6 @@ def cloth_qty(doc):
 		if ipd_process.process_name == 'Knitting':
 			knit_idx.append(str(ipd_process.idx))
 			dia_list = []
-			knitted_colour = []
 			for knitting_dia in frappe.get_doc('Knitting',ipd_process.process_record).dia:
 				dia_list.append(knitting_dia.dia)
 			process_name =  frappe.get_list("Item Production Detail Process", filters={'parent': ['in',doc.item_production_detail],'input_index':ipd_process.idx}, fields=['process_name','process_record'])
@@ -221,13 +220,9 @@ def cloth_qty(doc):
 				if process_name:
 					knit_idx = []
 			if process_name:
-				if process_name[0]['process_name'] == 'Bleaching':
-					table = frappe.get_doc(process_name[0]['process_name'],process_name[0]['process_record']).types
-				else:
-					table = frappe.get_doc(process_name[0]['process_name'],process_name[0]['process_record']).colours
-			for colth_colour in table:
-				knitted_colour.append(colth_colour.colour)
-				colour_list.add(colth_colour.colour)
+				table = frappe.get_doc(process_name[0]['process_name'],process_name[0]['process_record']).colour_shade_mapping
+			for row in table:
+				colour_list.add(row.colour)
 			ipd_item_mapping_doc = frappe.get_doc('IPD Item Mapping',{'item_production_details':doc.item_production_detail})
 			out_item_list = []
 			for row in ipd_item_mapping_doc.item_mapping:
