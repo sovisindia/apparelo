@@ -12,6 +12,7 @@
   "supplier",
   "location",
   "expect_return_items_at",
+  "entry_table",
   "get_items",
   "helper_section",
   "select_helper",
@@ -63,7 +64,8 @@
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Delivery Items",
-   "options": "DC Item"
+   "options": "DC Item",
+   "read_only_depends_on": "eval: doc.entry_table == 'Return Materials'"
   },
   {
    "fieldname": "get_items",
@@ -94,7 +96,8 @@
    "fieldname": "return_materials",
    "fieldtype": "Table",
    "label": "Items Expected in Return",
-   "options": "Return Materials"
+   "options": "Return Materials",
+   "read_only_depends_on": "eval: doc.entry_table == 'Delivery Items'"
   },
   {
    "fieldname": "amended_from",
@@ -259,11 +262,19 @@
    "fieldname": "make_entry",
    "fieldtype": "Button",
    "label": "Make Entry"
+  },
+  {
+   "fieldname": "entry_table",
+   "fieldtype": "Select",
+   "label": "Entry Table",
+   "options": "\nDelivery Items\nReturn Materials",
+   "reqd": 1
   }
  ],
+ "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2020-07-16 21:43:30.707906",
+ "modified": "2021-02-22 07:05:20.491155",
  "modified_by": "Administrator",
  "module": "Apparelo",
  "name": "DC",
