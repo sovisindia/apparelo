@@ -121,11 +121,12 @@ def generate_printable_list(items, grouping_params, lot, field=None):
 			temp_item['uom'] = item.uom if hasattr(item, 'uom') else item.primary_uom
 			temp_item.update(item_list_with_attributes[item.item_code])
 			temp_item['attribute_list'].sort()
-			if 'Apparelo Size' in temp_item:
-				if temp_item['Apparelo Size'] == row.size:
+			if not temp_item in item_dict_list:
+				if 'Apparelo Size' in temp_item:
+					if temp_item['Apparelo Size'] == row.size:
+						item_dict_list.append(temp_item)
+				else:
 					item_dict_list.append(temp_item)
-			else:
-				item_dict_list.append(temp_item)
 		if item_dict_list:
 			if 'Dia' in item_dict_list[0]:
 				item_dict_list = sorted(item_dict_list, key=itemgetter('Dia'))

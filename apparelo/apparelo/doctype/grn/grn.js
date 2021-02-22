@@ -157,7 +157,7 @@ frappe.ui.form.on('GRN', {
 		if (frm.doc.supplier)
 		{
 			frappe.call({
-				method:"apparelo.apparelo.doctype.dc.dc.get_supplier_based_address",
+				method:"apparelo.apparelo.doctype.grn.grn.get_supplier_based_address",
 				args:{supplier: frm.doc.supplier},
 				callback: function(r){
 					if (r.message){
