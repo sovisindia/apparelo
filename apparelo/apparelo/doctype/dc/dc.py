@@ -116,6 +116,31 @@ class DC(Document):
 			"supplier_warehouse": supplier_warehouse,
 			"items": dc_items})
 		po.save()
+		supplied_items = frappe.get_all('Purchase Order Item Supplied',
+				{'parent':po.name},'rm_item_code')
+		supplied_items_set = set()
+		for item in supplied_items:
+			supplied_items_set.add(item['rm_item_code'])
+		qty_wise_dc_item = self.get_dc_item()
+		for dc_item in qty_wise_dc_item:
+			supplied_items_set.remove(dc_item['item'])
+			item_name = dc_item['item']
+			idx = dc_item['idx']
+			qty = dc_item['qty']
+			supplied_qty_list = frappe.get_all('Purchase Order Item Supplied',
+				{'parent':po.name,'rm_item_code':dc_item['item']},'supplied_qty')
+			if not supplied_qty_list:
+				frappe.throw(_(f'Item {item_name} entered in delivery items at row {idx} was not found in PO supplied items'))
+			else:
+				supplied_qty = 0 
+				for row in supplied_qty_list:
+					supplied_qty += row['supplied_qty']
+				if not supplied_qty == dc_item['qty']:
+					frappe.throw(_(f'Item {item_name} of qty {qty} in delivery items at row {idx} was not found in PO supplied items'))
+		
+		if supplied_items_set:
+			supplied_items = ','.join(supplied_items_set)
+			frappe.throw(_(f'PO supplied items {supplied_items} was not found in delivery items entered.'))	
 		# set_reserve_warehouse related code does not exist in python hence the following is required
 		supplied_items_reserve_warehouse = self.get_supplied_items_reserve_warehouse()
 		for item in po.supplied_items:
@@ -136,6 +161,16 @@ class DC(Document):
 			if item.deliver_later and not item.delivery_location:
 				frappe.throw(_(f'Mention <b> Delivery Location </b> to deliver later for {item.pf_item_code}'))
 	
+	def get_dc_item(self):
+		dc_item_list = []
+		for item in self.items:
+			dc_item = {}
+			dc_item['item'] = item.item_code
+			dc_item['idx'] = item.idx
+			dc_item['qty'] = item.quantity
+			dc_item_list.append(dc_item)
+		return dc_item_list
+
 	def get_supplied_items_reserve_warehouse(self):
 		item_reserve_warehouse_location = {}
 		for item in self.items:
