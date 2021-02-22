@@ -199,10 +199,11 @@ def duplicate_values(doc):
 	for item in doc.get('return_materials'):
 		field_dict = {'Received Qty':'received_qty','Rejected Qty':'rejected_qty','Expected Qty':'qty'}
 		if doc.from_field in field_dict and doc.to_field in field_dict:
-			if 'secondary_qty' in item and 'secondary_uom' in item:
-				item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],field_dict[doc.from_field]:item[field_dict[doc.from_field]],field_dict[doc.to_field]:item[field_dict[doc.from_field]],"qty":item['qty'],"uom":item['uom'],"secondary_qty":item["secondary_qty"],"secondary_uom":item['secondary_uom']}
-			else:
-				item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],field_dict[doc.from_field]:item[field_dict[doc.from_field]],field_dict[doc.to_field]:item[field_dict[doc.from_field]],"qty":item['qty'],"uom":item['uom']}	
+			item_dict = {"pf_item_code":item['pf_item_code'],"item_code":item['item_code'],field_dict[doc.from_field]:item[field_dict[doc.from_field]],field_dict[doc.to_field]:item[field_dict[doc.from_field]],"qty":item['qty'],"uom":item['uom']}
+			if 'secondary_qty' in item:
+				item_dict["secondary_qty"] = item["secondary_qty"]
+			if 'secondary_uom' in item:
+				item_dict["secondary_uom"] = item['secondary_uom']
 		field_dict.pop(doc.from_field)
 		field_dict.pop(doc.to_field)
 		if list(field_dict.values())[0] in item:
