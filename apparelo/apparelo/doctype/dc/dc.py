@@ -58,20 +58,7 @@ class DC(Document):
 
 	def on_submit(self):
 		new_po = self.create_purchase_order()
-		rm_items = []
-		for item in new_po.supplied_items:
-			item_list = {}
-			item_list['name'] = item.name
-			item_list['item_code'] = item.main_item_code
-			item_list['rm_item_code'] = item.rm_item_code
-			item_list['item_name'] = item.rm_item_code
-			item_list['qty'] = item.required_qty
-			item_list['warehouse'] = item.reserve_warehouse
-			item_list['rate'] = item.rate
-			item_list['amount'] = item.amount
-			item_list['stock_uom'] = item.stock_uom
-			rm_items.append(item_list)
-		stock_dict = make_rm_stock_entry(new_po.name, json.dumps(rm_items))
+		stock_dict = get_stock_dict(new_po)
 		stock_entry = frappe.get_doc(stock_dict)
 		stock_entry.dc = self.name
 		stock_entry.save()
@@ -116,31 +103,6 @@ class DC(Document):
 			"supplier_warehouse": supplier_warehouse,
 			"items": dc_items})
 		po.save()
-		supplied_items = frappe.get_all('Purchase Order Item Supplied',
-				{'parent':po.name},'rm_item_code')
-		supplied_items_set = set()
-		for item in supplied_items:
-			supplied_items_set.add(item['rm_item_code'])
-		qty_wise_dc_item = self.get_dc_item()
-		for dc_item in qty_wise_dc_item:
-			supplied_items_set.remove(dc_item['item'])
-			item_name = dc_item['item']
-			idx = dc_item['idx']
-			qty = dc_item['qty']
-			supplied_qty_list = frappe.get_all('Purchase Order Item Supplied',
-				{'parent':po.name,'rm_item_code':dc_item['item']},'supplied_qty')
-			if not supplied_qty_list:
-				frappe.throw(_(f'Item {item_name} entered in delivery items at row {idx} was not found in PO supplied items'))
-			else:
-				supplied_qty = 0 
-				for row in supplied_qty_list:
-					supplied_qty += row['supplied_qty']
-				if not supplied_qty == dc_item['qty']:
-					frappe.throw(_(f'Item {item_name} of qty {qty} in delivery items at row {idx} was not found in PO supplied items'))
-		
-		if supplied_items_set:
-			supplied_items = ','.join(supplied_items_set)
-			frappe.throw(_(f'PO supplied items {supplied_items} was not found in delivery items entered.'))	
 		# set_reserve_warehouse related code does not exist in python hence the following is required
 		supplied_items_reserve_warehouse = self.get_supplied_items_reserve_warehouse()
 		for item in po.supplied_items:
@@ -149,6 +111,28 @@ class DC(Document):
 			else:
 				item.reserve_warehouse = lot_warehouse
 		po.save()
+		stock_dict = get_stock_dict(po)
+		supplied_items = {}
+		for item in stock_dict['items']:
+			if not item['item_name'] in supplied_items:
+				supplied_items[item['item_name']] = item['transfer_qty']
+			else:
+				supplied_items[item['item_name']] += item['transfer_qty']
+		qty_wise_dc_item = self.get_dc_item()
+		for dc_item in qty_wise_dc_item:
+			item_name = dc_item['item']
+			idx = dc_item['idx']
+			qty = dc_item['qty']
+			if not item_name in supplied_items:
+				frappe.throw(_(f'Item {item_name} entered in delivery items at row {idx} was not found in purchase order supplied items'))
+			else:
+				transfer_qty = round(supplied_items[item_name],3)
+				if not transfer_qty == flt(qty):
+					frappe.throw(_(f'Item {item_name} of qty {flt(qty)} entered in delivery items at row {idx} was mismatched with PO supplied items of qty {transfer_qty}'))
+			supplied_items.pop(item_name)
+		if supplied_items:
+			unmatched_supplied_items = ','.join(supplied_items.keys())
+			frappe.throw(_(f'Purchase order supplied items {unmatched_supplied_items} was not found in delivery items entered'))
 		po.submit()
 		return po
 
@@ -180,6 +164,23 @@ class DC(Document):
 				item_reserve_warehouse_location[item.item_code] = reserver_warehouse
 		
 		return item_reserve_warehouse_location
+
+def get_stock_dict(new_po):
+	rm_items = []
+	for item in new_po.supplied_items:
+		item_list = {}
+		item_list['name'] = item.name
+		item_list['item_code'] = item.main_item_code
+		item_list['rm_item_code'] = item.rm_item_code
+		item_list['item_name'] = item.rm_item_code
+		item_list['qty'] = item.required_qty
+		item_list['warehouse'] = item.reserve_warehouse
+		item_list['rate'] = item.rate
+		item_list['amount'] = item.amount
+		item_list['stock_uom'] = item.stock_uom
+		rm_items.append(item_list)
+	stock_dict = make_rm_stock_entry(new_po.name, json.dumps(rm_items))
+	return stock_dict
 
 def get_grouping_params(process):
 	gp_list = {
