@@ -822,9 +822,10 @@ def divide_total_quantity(doc):
 		for row in doc['items']:
 			item_doc = frappe.get_doc("Item",row['item_code'])
 			attribute_set = get_item_attribute_set(list(map(lambda x: x.attributes,[item_doc])))
-			if attribute_set[attribute][0] == attribute_value:
-				total_qty += row['available_quantity']
-				matching_item_list.append(row['item_code'])
+			if attribute in attribute_set:
+				if attribute_set[attribute][0] == attribute_value:
+					total_qty += row['available_quantity']
+					matching_item_list.append(row['item_code'])
 		for row in doc['items']:
 			if row['item_code'] in matching_item_list:
 				if total_delivered_qty>total_qty:
