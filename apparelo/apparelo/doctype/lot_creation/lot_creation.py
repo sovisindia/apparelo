@@ -19,6 +19,14 @@ from numpy import prod
 
 
 class LotCreation(Document):
+	def on_update_after_submit(self):
+		po_items = self.po_items
+		last_ipd_items = get_ipd_item(self.__dict__)
+		for row in po_items:
+			frappe.db.set_value('Lot Creation Plan Item',{'parent':self.name, 'item_code':row.item_code},'item_code',last_ipd_items[row.idx-1]['item_code'])
+			frappe.db.set_value('Lot Creation Plan Item',{'parent':self.name, 'bom_no': row.bom_no},'bom_no',last_ipd_items[row.idx-1]['bom_no'])
+		self.reload()
+
 	def on_submit(self):
 		create_parent_warehouse(self)
 		create_warehouse(self)
