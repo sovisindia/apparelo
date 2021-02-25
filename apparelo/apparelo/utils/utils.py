@@ -131,7 +131,7 @@ def generate_printable_list(items, grouping_params, lot, field=None):
 			if 'Dia' in item_dict_list[0]:
 				item_dict_list = sorted(item_dict_list, key=itemgetter('Dia'))
 			if 'Part' in item_dict_list[0]:
-				item_dict_list = sorted(item_dict_list, key=itemgetter('Part'))
+				item_dict_list = sorted(item_dict_list, key=lambda k: ("Part" not in k, k.get("Part", None)))
 
 	# generating the printable list
 	final_printable_list = []
