@@ -175,6 +175,7 @@ class ItemProductionDetail(Document):
 		colour=[]
 		existing_item_list = []
 		style=[]
+		dye_bleach_colours = []
 		final_process=self.final_process
 		for final_size in self.size:
 			item_size.append(final_size.size)
@@ -187,6 +188,12 @@ class ItemProductionDetail(Document):
 		final_attribute["Apparelo Colour"]=colour
 		final_attribute["Apparelo Size"]=item_size
 		piece_count=len(colour)
+		for process in self.processes:
+			if process.process_name in ['Dyeing', 'Bleaching']:
+				table = frappe.get_doc(process.process_name, process.process_record).colour_shade_mapping
+				for row in table:
+					if not row.colour in dye_bleach_colours:
+						dye_bleach_colours.append(row.colour)
 		for process in self.processes:
 			try:
 				process_variants = {}
@@ -370,7 +377,7 @@ class ItemProductionDetail(Document):
 										input_items.extend(pro['variants'])
 							input_items = list(set(input_items) - set(existing_item_list))
 							stitching_doc = frappe.get_doc('Stitching', process.process_record)
-							variants.extend(stitching_doc.create_variants(input_items,colour,self.item,final_process))
+							variants.extend(stitching_doc.create_variants(input_items,dye_bleach_colours,self.item,final_process))
 							boms.extend(stitching_doc.create_boms(input_items, variants,cutting_attribute,item_size,colour,piece_count,final_process))
 							process_variants['variants'] = list(set(variants))
 							process_variants['BOM']=list(set(boms))
