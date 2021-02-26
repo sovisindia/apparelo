@@ -32,7 +32,7 @@ class Packing(Document):
 		variants = create_variants(item, attribute_set)
 		return variants
 
-	def create_boms(self, input_item_names, variants, colour, attribute_set=None, item_size=None, piece_count=None, final_item=None, final_process=None):
+	def create_boms(self, input_item_names, variants, colour, attribute_set=None, item_size=None, piece_count=None, final_item=None, final_process=None, dye_bleach_colours=[]):
 		boms = []
 		if self.enable_additional_parts:
 			additional_parts = create_additional_parts(
@@ -47,7 +47,8 @@ class Packing(Document):
 					input_item_doc=frappe.get_doc("Item",input_item)
 					input_attr = get_attr_dict(input_item_doc.attributes)
 					for size in item_size:
-						if size in input_attr["Apparelo Size"] and size in variant_attr["Apparelo Size"]:
+						if size in input_attr["Apparelo Size"] and size in variant_attr["Apparelo Size"] \
+							and input_attr["Apparelo Colour"][0] in colour:
 							item_list.append({
 								"item_code": input_item,
 								"uom": "Nos"
@@ -83,7 +84,8 @@ class Packing(Document):
 						input_item_doc=frappe.get_doc("Item",input_item)
 						input_attr = get_attr_dict(input_item_doc.attributes)
 						for size in item_size:
-							if size in input_attr["Apparelo Size"] and size in variant_attr["Apparelo Size"]:
+							if size in input_attr["Apparelo Size"] and size in variant_attr["Apparelo Size"] \
+								and input_attr["Apparelo Colour"][0] in colour:
 								item_list.append({
 									"item_code": input_item,
 									"uom": "Nos",

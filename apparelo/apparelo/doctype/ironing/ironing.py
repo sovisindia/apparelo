@@ -29,7 +29,7 @@ class Ironing(Document):
 			variants = create_variants(item+" Ironed Cloth", attribute_set)
 		return list(set(variants))
 
-	def create_boms(self, input_item_names, variants, colours, attribute_set=None, item_size=None, piece_count=None, final_item=None, final_process=None):
+	def create_boms(self, input_item_names, variants, colours, attribute_set=None, item_size=None, piece_count=None, final_item=None, final_process=None, dye_bleach_colours=[]):
 		boms = []
 		if self.enable_additional_parts:
 			additional_parts=create_additional_parts(self.additional_parts_colour,self.additional_parts_size,self.additional_parts)
@@ -51,7 +51,7 @@ class Ironing(Document):
 							if is_mapped and size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"]:
 								item_list.append({"item_code": input_item,"uom": "Nos"})
 						else:
-							for colour in colours:
+							for colour in dye_bleach_colours:
 								if size in input_attr["Apparelo Size"]  and size in variant_attr["Apparelo Size"] and colour in input_attr["Apparelo Colour"] and colour in variant_attr["Apparelo Colour"]:
 									item_list.append({"item_code": input_item,"uom": "Nos"})
 			if self.enable_additional_parts:

@@ -222,9 +222,9 @@ class ItemProductionDetail(Document):
 					if process.input_item:
 						pass
 					if process.ipd_name:
-						ipd.append(get_process_variants(process_variants,ipd,process,final_attribute,item_size,colour,piece_count,self.item,final_process))
+						ipd.append(get_process_variants(process_variants,ipd,process,final_attribute,item_size,colour,piece_count,self.item,final_process, dye_bleach_colours))
 					elif process.input_index:
-						ipd.append(get_default_process_variants(self.name,ipd,process,process_variants,attribute_set,item_size,colour,piece_count,self.item,final_process))
+						ipd.append(get_default_process_variants(self.name,ipd,process,process_variants,attribute_set,item_size,colour,piece_count,self.item,final_process, dye_bleach_colours))
 					continue
 				if process.process_name == 'Steaming':
 					process_variants['process'] = 'Steaming'
@@ -399,7 +399,7 @@ class ItemProductionDetail(Document):
 							input_items = list(set(input_items) - set(existing_item_list))
 							process_variants['process_record'] = process.process_record
 							stitching_doc = frappe.get_doc('Stitching', process.process_record)
-							variants.extend(stitching_doc.create_variants(input_items,colour,self.item,final_process))
+							variants.extend(stitching_doc.create_variants(input_items,dye_bleach_colours,self.item,final_process))
 							boms.extend(stitching_doc.create_boms(input_items, variants,cutting_attribute,item_size,colour,piece_count,final_process))
 							process_variants['variants'] = list(set(variants))
 							process_variants['BOM']=list(set(boms))
@@ -594,7 +594,7 @@ def get_variants(index,ipd_item_doc):
 			variants.append(item_mapping.item)
 	return ipd_name,input_index,list(set(variants)),list(set(input_item)),process,str(index)
 
-def get_process_variants(process_variants,ipd,process,cutting_attribute,item_size,colour,piece_count,item,final_process):
+def get_process_variants(process_variants,ipd,process,cutting_attribute,item_size,colour,piece_count,item,final_process, dye_bleach_colours):
 	item_list=[]
 	variants=[]
 	boms=[]
@@ -617,13 +617,13 @@ def get_process_variants(process_variants,ipd,process,cutting_attribute,item_siz
 	process_variants['process_record'] = process.process_record
 	process_doc = frappe.get_doc(process.process_name, process.process_record)
 	variants.extend(process_doc.create_variants(list(set(item_list)),colour,item,final_process))
-	boms.extend(process_doc.create_boms(item_list, variants,cutting_attribute,item_size,colour,piece_count,final_process))
+	boms.extend(process_doc.create_boms(item_list, variants,cutting_attribute,item_size,colour,piece_count,final_process, dye_bleach_colours=dye_bleach_colours))
 	process_variants['variants'] = list(set(variants))
 	process_variants['BOM']=list(set(boms))
 	process_variants['input_item']=list(set(item_list))
 	return process_variants
 
-def get_default_process_variants(ipd_name,ipd,process,process_variants,attribute_set,item_size,colour,piece_count,item,final_process):
+def get_default_process_variants(ipd_name,ipd,process,process_variants,attribute_set,item_size,colour,piece_count,item,final_process, dye_bleach_colours):
 	input_items_= []
 	variants=[]
 	boms=[]
@@ -638,7 +638,7 @@ def get_default_process_variants(ipd_name,ipd,process,process_variants,attribute
 	process_variants['process_record'] = process.process_record
 	process_doc = frappe.get_doc(process.process_name, process.process_record)
 	variants.extend(process_doc.create_variants(input_item_names=input_items_, colour=colour, item=item, final_process=final_process))
-	boms.extend(process_doc.create_boms(input_items_, variants, colour, attribute_set=attribute_set, item_size=item_size, piece_count=piece_count, final_item=item, final_process=final_process))
+	boms.extend(process_doc.create_boms(input_items_, variants, colour, attribute_set=attribute_set, item_size=item_size, piece_count=piece_count, final_item=item, final_process=final_process, dye_bleach_colours=dye_bleach_colours))
 	process_variants['variants'] = list(set(variants))
 	process_variants['BOM']=list(set(boms))
 	process_variants['input_item']=list(set(input_items_))
