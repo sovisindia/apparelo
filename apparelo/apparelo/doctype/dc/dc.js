@@ -24,7 +24,7 @@ frappe.ui.form.on('DC', {
 				frm.set_value("company_address_name",data[0].name);
 			}
 		})
-		frm.set_df_property("select_helper","options",['','Copy Over', 'Divide Total Quantity'].join('\n'))
+		frm.set_df_property("select_helper","options",['','Copy Over', 'Divide Total Quantity', 'Distribute Item Quantity', 'Distribute Additional Item Quantity'].join('\n'))
 		frm.set_df_property("from_field","options",['Available Qty','Delivery Qty','Secondary Qty'].join('\n'))
 		frm.set_df_property("to_field","options",['Available Qty','Delivery Qty','Secondary Qty'].join('\n'))
 		frm.set_query("supplier", function() {
@@ -50,6 +50,13 @@ frappe.ui.form.on('DC', {
 					"link_name": frm.doc.company
 				}
 			}
+		});
+		frm.set_query("additional_item", function() {
+			return {
+				filters: {
+					"item_group":"Raw Material"
+				}
+			};
 		});
 	},
 	copy_over:function(frm){
@@ -183,6 +190,50 @@ frappe.ui.form.on('DC', {
 		const set_fields = ['item_code','primary_uom','quantity','available_quantity','pf_item_code',"secondary_uom"];
 		frappe.call({
 			method: "apparelo.apparelo.doctype.dc.dc.divide_total_quantity",
+			freeze: true,
+			args: {doc: frm.doc},
+			callback: function(r) {
+				if(r.message) {
+					frm.set_value('items', []);
+					$.each(r.message, function(i, d) {
+						var item = frm.add_child('items');
+						for (let key in d) {
+							if (d[key] && in_list(set_fields, key)) {
+								item[key] = d[key];
+							}
+						}
+					});
+				}
+				refresh_field('items');
+			}
+		});	
+	},
+	distribute_qty: function(frm){
+		const set_fields = ['item_code','primary_uom','quantity','available_quantity','pf_item_code',"secondary_uom"];
+		frappe.call({
+			method: "apparelo.apparelo.doctype.dc.dc.distribute_qty",
+			freeze: true,
+			args: {doc: frm.doc},
+			callback: function(r) {
+				if(r.message) {
+					frm.set_value('items', []);
+					$.each(r.message, function(i, d) {
+						var item = frm.add_child('items');
+						for (let key in d) {
+							if (d[key] && in_list(set_fields, key)) {
+								item[key] = d[key];
+							}
+						}
+					});
+				}
+				refresh_field('items');
+			}
+		});	
+	},
+	distribute_item_quantity: function(frm){
+		const set_fields = ['item_code','primary_uom','quantity','available_quantity','pf_item_code',"secondary_uom"];
+		frappe.call({
+			method: "apparelo.apparelo.doctype.dc.dc.distribute_item_quantity",
 			freeze: true,
 			args: {doc: frm.doc},
 			callback: function(r) {
