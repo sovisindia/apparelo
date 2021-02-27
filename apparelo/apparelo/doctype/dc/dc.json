@@ -26,6 +26,17 @@
   "divide_total_quantity",
   "column_break_19",
   "attribute_value",
+  "distribute_item_quantity_section",
+  "parts",
+  "colours",
+  "column_break_24",
+  "size_1",
+  "quantity",
+  "distribute_item_quantity",
+  "distribute_additional_item_quantity_section",
+  "additional_item",
+  "qty",
+  "distribute_qty",
   "section_break_13",
   "items",
   "delete_unavailable_delivery_items",
@@ -306,12 +317,72 @@
    "fieldname": "total_quantity_delivered",
    "fieldtype": "Float",
    "label": "Total Quantity Delivered"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "column_break_24",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "parts",
+   "fieldtype": "Table MultiSelect",
+   "label": "Parts",
+   "options": "Cutting Part"
+  },
+  {
+   "fieldname": "colours",
+   "fieldtype": "Table MultiSelect",
+   "label": "Colours",
+   "options": "Cutting Colors"
+  },
+  {
+   "fieldname": "size_1",
+   "fieldtype": "Link",
+   "label": "Size",
+   "options": "Apparelo Size"
+  },
+  {
+   "depends_on": "eval:doc.select_helper=='Distribute Additional Item Quantity' && doc.docstatus == 0",
+   "fieldname": "distribute_additional_item_quantity_section",
+   "fieldtype": "Section Break",
+   "label": "Distribute Additional Item Quantity"
+  },
+  {
+   "fieldname": "additional_item",
+   "fieldtype": "Link",
+   "label": "Additional Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Qty"
+  },
+  {
+   "depends_on": "eval:doc.select_helper=='Distribute Item Quantity' && doc.docstatus == 0",
+   "fieldname": "distribute_item_quantity_section",
+   "fieldtype": "Section Break",
+   "label": "Distribute Item Quantity"
+  },
+  {
+   "fieldname": "distribute_item_quantity",
+   "fieldtype": "Button",
+   "label": "Distribute Item Quantity"
+  },
+  {
+   "fieldname": "distribute_qty",
+   "fieldtype": "Button",
+   "label": "Distribute Qty"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2021-02-24 08:25:59.539700",
+ "modified": "2021-02-27 07:27:27.081403",
  "modified_by": "Administrator",
  "module": "Apparelo",
  "name": "DC",

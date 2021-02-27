@@ -19,6 +19,7 @@ from erpnext.manufacturing.doctype.production_plan.production_plan import get_it
 from erpnext.stock.doctype.item.item import get_uom_conv_factor
 from apparelo.apparelo.utils.utils import generate_printable_list, generate_html_from_list, generate_total_row_and_column, generate_empty_column_list
 from apparelo.apparelo.utils.item_utils import get_item_attribute_set
+import itertools
 
 
 class DC(Document):
@@ -463,6 +464,16 @@ def get_expected_items_in_return(doc, items_to_be_sent=None, use_delivery_qty=Fa
 	receivable_list = get_receivable_list_values(
 		lot_items, receivable_list, expect_return_items_at)
 
+	is_multi_process = frappe.db.get_value('Apparelo Process', dc_process,'is_multi_process')
+	if is_multi_process:
+		to_process = frappe.db.get_value('Multi Process', dc_process, 'to_process')
+		if to_process == 'Packing':
+			for item in lot_items:
+				receivable_list[item['item_code']] = item['planned_qty']
+	elif dc_process == 'Packing':
+		for item in lot_items:
+			receivable_list[item['item_code']] = item['planned_qty']
+
 	percentage_in_excess = frappe.db.get_value(
 		'Lot Creation', lot, 'percentage')
 	if percentage_in_excess:
@@ -839,4 +850,44 @@ def divide_total_quantity(doc):
 					dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":row['quantity']})
 				else:
 					dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom']})
+	return dc_item
+
+@frappe.whitelist()
+def distribute_item_quantity(doc):
+	dc_item = []
+	if isinstance(doc, string_types):
+		doc = frappe._dict(json.loads(doc))
+	quantity = doc.get('quantity')
+	if quantity:
+		combination_list = []
+		combination_list.append([doc.get('size_1')])
+		combination_list.append([row['colors'] for row in doc.get('colours')])
+		combination_list.append([row['parts'] for row in doc.get('parts')])
+		combination_list = list(itertools.product(*combination_list))
+		for row in doc['items']:
+			item_doc = frappe.get_doc("Item",row['item_code'])
+			attribute_set = get_item_attribute_set(list(map(lambda x: x.attributes,[item_doc]))) 
+			if not('Apparelo Size' in attribute_set and 'Apparelo Colour' in attribute_set \
+				and 'Part' in attribute_set):
+				dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":row['quantity']})
+			else:
+				if (attribute_set['Apparelo Size'][0], attribute_set['Apparelo Colour'][0], attribute_set['Part'][0]) in combination_list:
+					dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":row['quantity']+quantity})
+				else:
+					dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":row['quantity']})
+	return dc_item
+
+@frappe.whitelist()
+def distribute_qty(doc):
+	dc_item = []
+	if isinstance(doc, string_types):
+		doc = frappe._dict(json.loads(doc))
+	qty = doc.get('qty')
+	selected_item = doc.get('additional_item')
+	if qty:
+		for row in doc['items']:
+			if row['item_code'] == selected_item:
+				dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":qty})
+			else:
+				dc_item.append({"item_code":row['item_code'],"primary_uom":row['primary_uom'],"available_quantity":row['available_quantity'],"pf_item_code":row['pf_item_code'],"secondary_uom":row['secondary_uom'],"quantity":row['quantity']})
 	return dc_item
