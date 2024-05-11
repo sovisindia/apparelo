@@ -1,0 +1,378 @@
+{
+  "charts": [],
+  "content": "[{\"id\":\"NrLMh9JbSz\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Apparelo: Garment Manufacturing</span>\",\"col\":12}},{\"id\":\"xOTHugj-V7\",\"type\":\"header\",\"data\":{\"text\":\"<b>Fabric Processing</b><br>\",\"col\":12}},{\"id\":\"jtek3wyGNf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Knitting\",\"col\":3}},{\"id\":\"3CeDXxRmgg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dyeing\",\"col\":3}},{\"id\":\"Tl9Cb9ZY8O\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bleaching\",\"col\":3}},{\"id\":\"-lu-JleFHM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Steaming\",\"col\":3}},{\"id\":\"BtupC7PSQE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Compacting\",\"col\":3}},{\"id\":\"O780kxv78F\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"uoRh0FNByZ\",\"type\":\"card\",\"data\":{\"card_name\":\"Garment Construction\",\"col\":4}},{\"id\":\"6Wo7k5RHyx\",\"type\":\"card\",\"data\":{\"card_name\":\"Detailing and Customization\",\"col\":4}},{\"id\":\"JfBFFVeQ25\",\"type\":\"card\",\"data\":{\"card_name\":\"Quality Control\",\"col\":4}},{\"id\":\"iKr83gg9IS\",\"type\":\"card\",\"data\":{\"card_name\":\"Material Management\",\"col\":4}},{\"id\":\"n0HaFUdCNj\",\"type\":\"card\",\"data\":{\"card_name\":\"Production and Planning\",\"col\":4}},{\"id\":\"rb2Yhq39Kr\",\"type\":\"card\",\"data\":{\"card_name\":\"Additional Operations\",\"col\":4}},{\"id\":\"jf_K7IQ5iv\",\"type\":\"paragraph\",\"data\":{\"text\":\"Settings and Configuration\",\"col\":12}},{\"id\":\"XNwr37tvyM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Settings\",\"col\":3}},{\"id\":\"_E11oE6YZA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Process\",\"col\":3}},{\"id\":\"1b2tHaQ4ou\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Part\",\"col\":3}},{\"id\":\"fzE2LmVDM6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dia\",\"col\":3}},{\"id\":\"2_ygWThFWA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Colour\",\"col\":3}},{\"id\":\"chCC1JGXN3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Yarn Shade\",\"col\":3}},{\"id\":\"GpIcmE2DWZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Style\",\"col\":3}},{\"id\":\"cAAMk2jM3I\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Size\",\"col\":3}}]",
+  "creation": "2024-05-05 08:57:27.892699",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "shirt",
+  "idx": 0,
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Apparelo",
+  "links": [
+   {
+    "description": "Focuses on the assembly and construction of garments, including cutting and stitching techniques essential for garment shaping.\r\n",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Garment Construction",
+    "link_count": 3,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Cutting",
+    "link_count": 0,
+    "link_to": "Cutting",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Stitching",
+    "link_count": 0,
+    "link_to": "Stitching",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Ironing",
+    "link_count": 0,
+    "link_to": "Ironing",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "description": "Manages detailed tasks such as labeling and print work to enhance garment features and customization.\r\n",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Detailing and Customization",
+    "link_count": 3,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Label Fusing",
+    "link_count": 0,
+    "link_to": "Label Fusing",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Roll Printing",
+    "link_count": 0,
+    "link_to": "Roll Printing",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Piece Printing",
+    "link_count": 0,
+    "link_to": "Piece Printing",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "description": "Ensures garments meet quality standards through rigorous checking and provides management of goods received.\r\n",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Quality Control",
+    "link_count": 2,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Checking",
+    "link_count": 0,
+    "link_to": "Checking",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "GRN (Goods Received Note)",
+    "link_count": 0,
+    "link_to": "GRN",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "description": "Organizes the logistics of material handling from lot creation to closure, facilitating smooth operation flows.\r\n",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Material Management",
+    "link_count": 2,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Lot Creation",
+    "link_count": 0,
+    "link_to": "Lot Creation",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Lot Closure",
+    "link_count": 0,
+    "link_to": "Lot Closure",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "description": "Supports planning and execution of various production-related activities, aiming for efficiency and optimization.",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Production and Planning",
+    "link_count": 4,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "IPD BOM Mapping",
+    "link_count": 0,
+    "link_to": "IPD BOM Mapping",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "IPD Item Mapping",
+    "link_count": 0,
+    "link_to": "IPD Item Mapping",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Multi Process",
+    "link_count": 0,
+    "link_to": "Multi Process",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Custom Stock Entry",
+    "link_count": 0,
+    "link_to": "Custom Stock Entry",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "description": "Handles extra processes and operations that add value to the production cycle, ensuring versatility in garment production.\r\n",
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Additional Operations",
+    "link_count": 3,
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Card Break"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Packing",
+    "link_count": 0,
+    "link_to": "Packing",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Knitting Type",
+    "link_count": 0,
+    "link_to": "Knitting Type",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   },
+   {
+    "hidden": 0,
+    "is_query_report": 0,
+    "label": "Additional Parameters",
+    "link_count": 0,
+    "link_to": "Additional Parameters",
+    "link_type": "DocType",
+    "onboard": 0,
+    "type": "Link"
+   }
+  ],
+  "modified": "2024-05-05 09:22:19.162900",
+  "modified_by": "Administrator",
+  "module": "Apparelo",
+  "name": "Apparelo",
+  "number_cards": [],
+  "owner": "Administrator",
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": "Manufacturing",
+  "roles": [],
+  "sequence_id": 7.0,
+  "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Knitting",
+    "link_to": "Knitting",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Settings",
+    "link_to": "Apparelo Settings",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Dyeing",
+    "link_to": "Dyeing",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Process",
+    "link_to": "Apparelo Process",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Part",
+    "link_to": "Apparelo Part",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Bleaching",
+    "link_to": "Bleaching",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Dia",
+    "link_to": "Apparelo Dia",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Steaming",
+    "link_to": "Steaming",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Compacting",
+    "link_to": "Compacting",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Colour",
+    "link_to": "Apparelo Colour",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Yarn Shade",
+    "link_to": "Apparelo Yarn Shade",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Style",
+    "link_to": "Apparelo Style",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "label": "Size",
+    "link_to": "Apparelo Size",
+    "options": "{\"allow_sorting\":true,\"allow_create\":true,\"allow_delete\":true,\"allow_hiding\":false,\"allow_edit\":true,\"allow_resize\":true}",
+    "stats_filter": "[]",
+    "type": "DocType"
+   }
+  ],
+  "title": "Apparelo"
+ }

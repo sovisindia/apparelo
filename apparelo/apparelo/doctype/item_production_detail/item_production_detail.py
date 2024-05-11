@@ -12,7 +12,7 @@ from apparelo.apparelo.doctype.ipd_item_mapping.ipd_item_mapping import ipd_item
 from apparelo.apparelo.doctype.ipd_bom_mapping.ipd_bom_mapping import ipd_bom_mapping
 from frappe.utils import comma_and,get_link_to_form
 from collections import Counter
-from frappe.core.page.background_jobs.background_jobs import get_info
+# from frappe.core.page.background_jobs.background_jobs import get_info 
 from frappe.utils.background_jobs import enqueue
 from six import string_types
 
@@ -29,23 +29,24 @@ class ItemProductionDetail(Document):
 			return
 		self.validate_process_records()
 
-		enqueued_jobs = [d.get("job_name") for d in get_info()]
-		if self.name in enqueued_jobs:
-			frappe.throw(
-				_("Submission already in progress. Please wait for sometime.")
-			)
-		else:
-			enqueue(
-				submit_ipd,
-				queue="default",
-				timeout=6000,
-				event="ipd_submission",
-				job_name=self.name,
-				ipd=self.name
-			)
-			frappe.throw(
-				_("Submission job added to queue. Please check after sometime.")
-			)
+		# TODO: Experimental removal please check
+		# enqueued_jobs = [d.get("job_name") for d in get_info()]
+		# if self.name in enqueued_jobs:
+		# 	frappe.throw(
+		# 		_("Submission already in progress. Please wait for sometime.")
+		# 	)
+		# else:
+		enqueue(
+			submit_ipd,
+			queue="default",
+			timeout=6000,
+			event="ipd_submission",
+			job_name=self.name,
+			ipd=self.name
+		)
+		frappe.throw(
+			_("Submission job added to queue. Please check after sometime.")
+		)
 
 	def create_item_templates(self):
 		template_item_codes_from_stitching = {"Stitching":" Stitched Cloth", "Checking":" Checked Cloth","Ironing":" Ironed Cloth"}

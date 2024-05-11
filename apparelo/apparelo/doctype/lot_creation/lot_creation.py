@@ -15,7 +15,14 @@ from apparelo.apparelo.doctype.dc.dc import get_receivable_list_values
 from erpnext.manufacturing.doctype.production_plan.production_plan import get_items_for_material_requests
 from frappe.utils import today
 from apparelo.apparelo.utils.item_utils import get_attr_dict
-from numpy import prod
+# from numpy import prod
+
+def prod(iter):
+	r = 1
+	for n in iter:
+		i *= n
+	return r
+
 
 
 class LotCreation(Document):
